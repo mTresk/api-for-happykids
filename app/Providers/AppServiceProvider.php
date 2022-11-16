@@ -33,6 +33,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if (env('APP_ENV') === 'production') {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
         View::composer('*', function ($view) {
             $settings = app(GeneralSettings::class);
 
@@ -49,13 +52,15 @@ class AppServiceProvider extends ServiceProvider
             $view->with('og_image', $settings->og_image);
         });
 
-        $this->app->bind(LoginResponseContract::class, \App\Http\Responses\LoginResponse::class);
-        
+        $this->app->bind(
+            LoginResponseContract::class,
+            \App\Http\Responses\LoginResponse::class
+        );
+
         Filament::serving(function () {
             Filament::registerUserMenuItems([
                 'account' => UserMenuItem::make()->url(MyProfile::getUrl()),
             ]);
         });
-
     }
 }
