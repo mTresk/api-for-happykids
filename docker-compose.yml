@@ -4,14 +4,16 @@ services:
   server:
     image: nginx:latest
     volumes:
-      - ./:/var/www:delegated
+      - ./:/var/www
       - ./_docker/nginx/conf.d:/etc/nginx/conf.d
+      #    ports:
+      #      - "80:80"
     labels:
-      - "traefik.http.routers.server.rule=Host(`api.djtresk.ru`)"
+      - "traefik.http.routers.server.rule=Host(`api.testdomain.ru`)"
       - "traefik.port=80"
       - "traefik.docker.network=web"
-      - "traefik.http.routers.server.entrypoints=websecure"
-      - "traefik.http.routers.server.tls.certresolver=myresolver"
+    #      - "traefik.http.routers.server.entrypoints=websecure"
+    #      - "traefik.http.routers.server.tls.certresolver=myresolver"
     depends_on:
       - app
     container_name: hk_server
@@ -24,11 +26,13 @@ services:
       context: .
       dockerfile: _docker/app/Dockerfile
     volumes:
-      - ./:/var/www:delegated
+      - ./:/var/www
       - ./_docker/php/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini
     depends_on:
       - db
     container_name: hk_app
+    networks:
+      - web
 
   db:
     image: mysql:8.0
@@ -42,6 +46,9 @@ services:
       - "3306:3306"
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     container_name: hk_db
+    networks:
+      - internal
+      - web
 
 networks:
   web:

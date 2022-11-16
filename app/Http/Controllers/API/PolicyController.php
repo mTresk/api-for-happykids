@@ -7,8 +7,11 @@ use App\Http\Controllers\Controller;
 
 class PolicyController extends Controller
 {
-    public function index()
+    public function index(PolicySettings $settings)
     {
-        return app(PolicySettings::class)->toJson();
+        return [
+            'title' => $settings->title,
+            'text' => $settings->text,
+        ];
     }
 }

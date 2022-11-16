@@ -13,7 +13,6 @@ class SettingsController extends Controller
         return [
             'site_name' => $settings->site_name,
             'site_description' => $settings->site_description,
-            'origin' => url('/'),
             'phone' => $settings->phone,
             'whatsapp' => $settings->whatsapp,
             'telegram' => $settings->telegram,

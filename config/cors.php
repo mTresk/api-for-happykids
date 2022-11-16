@@ -25,6 +25,7 @@ return [
         'http://happykids-backend.test',
         'https://yoomoney.ru',
         'http://localhost:3000',
+        'http://0.0.0.0:3000/'
     ],
 
     'allowed_origins_patterns' => [],
